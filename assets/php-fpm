@@ -1,0 +1,67 @@
+#!/bin/bash
+MainName="php-fpm"
+MainExec="/usr/local/php/sbin/php-fpm"
+MainExecOpts="-y /etc/php/php-fpm.conf"
+MainPid="cat /var/run/php-fpm.pid"
+
+test -x $MainExec || exit 0
+
+runYet() {
+    $MainPid >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo 'yes';
+    else
+        echo 'no';
+    fi
+}
+program_start() {
+    `$MainExec $MainExecOpts`
+}
+program_stop() {
+    if [ `runYet` = 'no' ]; then
+        echo "not running."
+        exit 1
+    fi
+    kill `$MainPid`
+}
+failed() {
+    echo -e "                   [\E[31m\033[2m Failed \033[0m]"
+}
+
+case "$1" in
+    'start')
+        echo -n "Start $MainName: "
+        program_start
+    ;;
+    'stop')
+        echo -n "Stop $MainName: "
+        program_stop
+    ;;
+    'restart')
+        echo -n "Restart $MainName: "
+        if [ `runYet` = 'yes' ]; then
+            program_stop
+            sleep 1
+        fi
+        program_start
+    ;;
+    'status')
+        echo -n "Status of $MainName: "
+        if [ `runYet` = 'no' ]; then
+            echo "not running."
+        else
+            echo -e "is running.(pid:\E[34m\033[4m`$MainPid`\033[0m)"
+        fi
+        exit 0
+    ;;
+    *)
+        echo "Useage : $0 {start|stop|restart|status}"
+        exit 0
+    ;;
+esac
+
+if [ $? ]; then 
+    echo -e "                   [\E[32m\033[2m OK \033[0m]"
+fi
+
+exit 0

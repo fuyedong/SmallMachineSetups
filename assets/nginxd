@@ -1,0 +1,75 @@
+#!/bin/bash
+NginxExec="/usr/local/nginx/sbin/nginx"
+NginxPid="cat /var/run/nginx.pid"
+ulimitSize=8192
+
+test -x $NginxExec || exit 0
+
+runYet() {
+    $NginxPid >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo 'yes';
+    else
+        echo 'no';
+    fi
+}
+program_start() {
+    ulimit -SHn $ulimitSize
+    $NginxExec
+}
+program_stop() {
+    if [ `runYet` = 'no' ]; then
+        echo 'Nginx has not started yet !'
+        exit 1
+    fi
+    `$NginxExec -s stop`
+}
+failed() {
+    echo -e "                   [\E[31m\033[2m Failed \033[0m]"
+}
+
+case "$1" in
+    'start')
+        echo -n "start nginx :"
+            program_start
+    ;;
+    'stop')
+        echo -n "stop nginx :"
+            program_stop
+    ;;
+    'restart')
+        echo -n "restart nginx :"
+        if [ `runYet` = 'yes' ]; then
+                    program_stop
+            sleep 1
+        fi
+                program_start
+    ;;
+    'reload')
+        if [ `runYet` = 'no' ]; then
+            echo -n 'Nginx has not started yet !'
+                        failed
+            exit 0
+        fi
+        echo -n "reload nginx :"
+        `$NginxExec -s reload`;
+    ;;
+    'status')
+        if [ `runYet` = 'no' ]; then
+            echo 'Nginx has not started yet !'
+        else
+            echo -e "Nginx is running ! [ pid : \E[34m\033[4m`$NginxPid`\033[0m ]"
+        fi
+        exit 0
+    ;;
+    *)
+        echo "Useage : $0 {start|stop|restart|reload|status}"
+        exit 0
+    ;;
+esac
+
+if [ $? ]; then 
+    echo -e "                   [\E[32m\033[2m OK \033[0m]"
+fi
+
+exit 0
