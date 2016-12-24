@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./libs/project_dir.sh
+
 source make_swap.sh
 source make_user_www.sh
 source make_src_dir.sh
