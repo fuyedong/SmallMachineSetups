@@ -39,15 +39,19 @@ pe_exists=`php -m | grep phalcon | xargs`
 if [ $pe_exists == "$1" ]; then
     echo "existed."
 else
-    echo "OK."
     cd /root/src
     if [ ! -e $pe_name ]; then
         wget $pe_src
     fi
     tar xzf ${pe_name}
     cd cphalcon-phalcon-v2.0.13/build/
-    ./insall
-    echo "
-[$1]
+    ./install
+    if [ "$?" == "0" ];then
+        echo "
+[Phalcon]
 extension=phalcon.so" >> /etc/php/php.ini
+        echo "OK."
+    else
+        echo "Failed."
+    fi
 fi
