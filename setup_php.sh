@@ -45,20 +45,25 @@ if [ ! -e "/ect/php/php.ini" ]; then
     fi
 fi
 
+link_php_fpm() {
+    cd $1
+    if [ ! -e "S10php-fpm" ];then
+        ln -s ../init.d/php-fpm S10php-fpm
+    fi
+}
+
 if [ ! -e "/etc/init.d/php-fpm" ]; then
     cd ${PROJECT_DIR}
     if [ ! -e "./assets/php-fpm" ]; then
         echo "Origin php-fpm startup script not found."
     else
+        echo "Install setup script."
         cp ./assets/php-fpm /etc/init.d/php-fpm
         chmod 0755 /etc/init.d/php-fpm
-        cd /etc/rc2.d
-        ln -s ../init.d/php-fpm S10php-fpm
-        cd /etc/rc3.d
-        ln -s ../init.d/php-fpm S10php-fpm
-        cd /etc/rc4.d
-        ln -s ../init.d/php-fpm S10php-fpm
-        cd /etc/rc5.d
-        ln -s ../init.d/php-fpm S10php-fpm
+        link_php_fpm /etc/rc2.d
+        link_php_fpm /etc/rc3.d
+        link_php_fpm /etc/rc4.d
+        link_php_fpm /etc/rc5.d
+        /etc/init.d/php-fpm restart
     fi
 fi
