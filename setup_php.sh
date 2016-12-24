@@ -21,25 +21,25 @@ if [ ! -e "/ect/php/php.ini" ]; then
         sudo mkdir /etc/php
     fi
     PHP_SRC_DIR=`find /root/src/ -name 'php-5*' -type d`
-    cd ""
-    if [ ! -e "${PHP_SRC_DIR}/php.ini-production" ]; then
+    cd "$PHP_SRC_DIR"
+    if [ ! -e "./php.ini-production" ]; then
         echo "Origin PHP configuration not found."
     else
-        sudo cp "${PHP_SRC_DIR}/php.ini-production /etc/php/php.ini"
+        sudo cp ./php.ini-production /etc/php/php.ini
     fi
-    if [ ! -e "${PHP_SRC_DIR}/sapi/fpm/php-fpm.conf" ]; then
+    if [ ! -e "./sapi/fpm/php-fpm.conf" ]; then
         echo "Origin PHP-FPM configuration not found."
     else
-        sudo cp "${PHP_SRC_DIR}/sapi/fpm/php-fpm.conf /etc/php/php-fpm.conf"
+        sudo cp ./sapi/fpm/php-fpm.conf /etc/php/php-fpm.conf
     fi
 fi
 
 if [ ! -e "/etc/init.d/php-fpm" ]; then
-    PHP_INIT_FILE=`dirname $0`
-    if [ ! -e "${PHP_INIT_FILE}/assets/php-fpm" ]; then
+    cd `dirname $0`
+    if [ ! -e "./assets/php-fpm" ]; then
         echo "Origin php-fpm startup script not found."
     else
-        sudo cp "${PHP_INIT_FILE}/assets/php-fpm /etc/init.d/php-fpm"
+        sudo cp ./assets/php-fpm /etc/init.d/php-fpm
         sudo chmod 0755 /etc/init.d/php-fpm
         cd /etc/rc2.d
         sudo ln -s ../init.d/php-fpm S10php-fpm
