@@ -33,7 +33,7 @@ php_extension_install solr http://pecl.php.net/get/solr-2.4.0.tgz solr-2.4.0/
 
 
 echo -n "Installing phalcon: "
-pe_src=https://github.com/phalcon/cphalcon/archive/phalcon-v2.0.13.tar.gz
+pe_src="https://github.com/phalcon/cphalcon/archive/phalcon-v2.0.13.tar.gz"
 pe_name=`basename $pe_src`
 pe_exists=`php -m | grep phalcon | xargs`
 if [ $pe_exists == "$1" ]; then
@@ -41,12 +41,12 @@ if [ $pe_exists == "$1" ]; then
 else
     echo "OK."
     cd /root/src
-    if [ ! -e pe_name ]; then
+    if [ ! -e $pe_name ]; then
         wget $pe_src
     fi
     tar xzf ${pe_name}
     cd cphalcon-phalcon-v2.0.13/build/
-    ./build
+    ./insall
     echo "
 [$1]
 extension=phalcon.so" >> /etc/php/php.ini
