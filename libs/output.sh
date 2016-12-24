@@ -1,7 +1,7 @@
 #!/bin/bash
 
 out_color() {
-    echo -e "\E\033[$*\033[0m"
+    echo -e "\033[$*\033[0m"
 }
 
 #error
