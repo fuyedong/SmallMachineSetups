@@ -11,14 +11,15 @@ if [ "$*" == "" ]; then
     exit 1
 fi
 
+PHP_SRC_DIR=`find /root/src/ -name 'php-5*' -type d`
+if [ "$PHP_SRC_DIR" == "" ]; then
+    out_e "PHP source directory not found."
+    exit 1
+fi
+
 php_internal_extension_install() {
     pe_e=`php -m | grep "$1" | xargs`
-    PHP_SRC_DIR=`find /root/src/ -name 'php-5*' -type d`
-    if [ "$PHP_SRC_DIR" != "" ]; then
-        cd "${PHP_SRC_DIR}/ext/"
-    else
-        out_n "PHP source directory not found."
-    fi
+    cd "${PHP_SRC_DIR}/ext/"
     if [ "$pe_e" == "$1" ]; then
         echo "existed."
     elif [ ! -e "./$1" ]; then
