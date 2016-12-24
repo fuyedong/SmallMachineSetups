@@ -25,6 +25,7 @@ php_internal_extension_install() {
         out_w "$1 is not an internal php extension."
     else
         echo -n "Installing $1: "
+        cd "./$1"
         phpize
         ./configure
         make && make install
