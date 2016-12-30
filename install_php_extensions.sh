@@ -36,7 +36,7 @@ echo -n "Installing phalcon: "
 pe_src="https://github.com/phalcon/cphalcon/archive/phalcon-v2.0.13.tar.gz"
 pe_name=`basename $pe_src`
 pe_exists=`php -m | grep phalcon | xargs`
-if [ $pe_exists == "$1" ]; then
+if [ $pe_exists == "phalcon" ]; then
     echo "existed."
 else
     cd /root/src
