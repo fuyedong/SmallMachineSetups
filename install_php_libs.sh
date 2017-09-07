@@ -41,3 +41,6 @@ sudo apt-get install -y libmagickcore-dev libmagickwand-dev
 
 # Spelling check
 sudo apt-get install -y libpspell-dev
+
+# Readline
+sudo apt-get install -y libreadline-dev libedit-dev
