@@ -31,7 +31,7 @@ sudo apt-get install -y libmhash-dev libmhash2
 sudo apt-get install -y libltdl-dev libssl-dev
 
 # curl
-sudo apt-get install -y libcurl4-openssl-dev
+sudo apt-get install -y libcurl-openssl1.0-dev
 
 # Mysql
 sudo apt-get install -y libmysqlclient-dev
